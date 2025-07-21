@@ -17,6 +17,7 @@ import { toast } from 'react-hot-toast';
 import { useSession } from 'next-auth/react';
 import LikeButton from './LikeButton';
 import { useRecentlyPlayed } from '@/lib/hooks/useRecentlyPlayed';
+import AddToPlaylistDropdown from './AddToPlaylistDropdown';
 
 // Helper function to get YouTube video ID
 const getYouTubeVideoId = (url: string) => {
@@ -343,37 +344,8 @@ export default function Player() {
           </div>
           <div className="flex items-center gap-2 relative">
             <LikeButton songId={currentSong.id} size="sm" />
-            {/* Add to Playlist Button */}
-            <button
-              onClick={() => setShowPlaylistDropdown(v => !v)}
-              className="p-2 text-light-secondary hover:text-primary transition-colors"
-              title="Add to Playlist"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 6v12m0 0l-3-3m3 3l3-3M3 6h13.5" />
-              </svg>
-            </button>
-            {showPlaylistDropdown && (
-              <div ref={dropdownRef} className="absolute z-50 top-10 right-0 bg-dark-secondary border border-gray-700 rounded shadow-lg w-56">
-                <div className="p-2 text-sm font-semibold text-light-secondary">Add to Playlist</div>
-                <div className="max-h-60 overflow-y-auto">
-                  {userPlaylists.length === 0 ? (
-                    <div className="p-2 text-light-secondary">No playlists found.</div>
-                  ) : (
-                    userPlaylists.map((pl) => (
-                      <button
-                        key={pl.id}
-                        onClick={() => handleAddToPlaylist(pl.id)}
-                        className="w-full text-left px-4 py-2 hover:bg-primary/10 text-light block disabled:opacity-60"
-                        disabled={isAddingToPlaylist}
-                      >
-                        {pl.name}
-                      </button>
-                    ))
-                  )}
-                </div>
-              </div>
-            )}
+            {/* Add to Playlist Button (refactored) */}
+            <AddToPlaylistDropdown currentSong={currentSong} />
           </div>
         </div>
 
